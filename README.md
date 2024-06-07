@@ -1,6 +1,6 @@
 # PyQt5 Animation Application
 
-This is a simple PyQt5 application that generates and displays a 2D animation of random grayscale images.
+This is a simple PyQt5 application that generates and displays a 2D animation of random numpy arrays (grayscale images) using OpenCV.
 
 ## Requirements
 
