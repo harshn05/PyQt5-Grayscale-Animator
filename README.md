@@ -1,4 +1,4 @@
-# PyQt5 Animation Application
+# PyQt5-Numpy-Animator 
 
 This is a simple PyQt5 application that generates and displays a 2D animation of random numpy arrays (grayscale images) using OpenCV.
 
