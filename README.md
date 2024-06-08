@@ -18,4 +18,8 @@ This is a simple PyQt5 application that generates and displays a 2D animation of
 ```
 pip install PyQt5 numpy opencv-python
 ```
-3. Simply run python animate.py
+3. Simply run
+
+```
+python animate.py
+```
