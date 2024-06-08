@@ -24,3 +24,4 @@ pip install PyQt5 numpy opencv-python
 ```
 python animate.py
 ```
+![screenshot](screenshot.PNG)
