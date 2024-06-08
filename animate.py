@@ -22,6 +22,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.startButton)
         self.stopButton = QtWidgets.QPushButton(self.centralwidget)
         self.stopButton.setObjectName("stopButton")
+        self.stopButton.setEnabled(False)  # Initially disable the stop button
         self.verticalLayout.addWidget(self.stopButton)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -57,10 +58,14 @@ class Ui_MainWindow(object):
     def start_animation(self):
         # Start the QTimer
         self.timer.start(1)  # update every milisecond
+        self.startButton.setEnabled(False)  # Disable the start button
+        self.stopButton.setEnabled(True)  # Enable the stop button
 
     def stop_animation(self):
         # Stop the QTimer
         self.timer.stop()
+        self.startButton.setEnabled(True)  # Enable the start button
+        self.stopButton.setEnabled(False)  # Disable the stop button
 
     def render_numpy_array(self):
         # Reset the array
@@ -70,8 +75,8 @@ class Ui_MainWindow(object):
         for i, (x, y, r, color) in enumerate(self.circles):
             cv2.circle(self.array, (x, y), (self.counter + r) % 256, color, -1)
 
-        # Normalize the array to the range [0, 255] and convert it to uint8, (MemoryView)
-        N= (255 * self.array / np.max(self.array)).astype(np.uint8) 
+         # Normalize the array to the range [0, 255] and convert it to uint8, (MemoryView)
+        N = (255 * self.array / np.max(self.array)).astype(np.uint8)
 
         # Convert the numpy array to a QImage
         height, width, colors = self.array.shape
