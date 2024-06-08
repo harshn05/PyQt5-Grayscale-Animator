@@ -4,6 +4,7 @@ import os
 import cv2
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
+import random
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -37,6 +38,7 @@ class Ui_MainWindow(object):
         # Create a QTimer
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.render_numpy_array)
+        self.circles = [(random.randint(0, 512), random.randint(0, 512), random.randint(0, 256), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))) for _ in range(5)]
         self.counter = 0
 
     def retranslateUi(self, MainWindow):
@@ -52,8 +54,9 @@ class Ui_MainWindow(object):
         # Create a 3D numpy array of double datatype
         array = np.zeros((512, 512, 3))
 
-        # Create an expanding circle
-        cv2.circle(array, (256, 256), self.counter % 256, (0, 255, 0), -1)
+        # Create expanding circles
+        for i, (x, y, r, color) in enumerate(self.circles):
+            cv2.circle(array, (x, y), (self.counter + r) % 256, color, -1)
 
         # Normalize the array to the range [0, 255] and convert it to uint8
         array = (255 * array / np.max(array)).astype(np.uint8)

@@ -1,6 +1,6 @@
 # PyQt5-Numpy-Animator
 
-This is a simple PyQt5 application that generates a 2D animation of a time dependent numpy array. The animation display is embedded in the PyQt5 application window. The numpy data is changed (to mimic expanding circle) using opencv.
+This is a simple PyQt5 application that generates a 2D animation of a time dependent numpy array. The animation display is embedded in the PyQt5 application window. The numpy data is changed (to mimic expanding circles) using opencv.
 
 ## Requirements
 
