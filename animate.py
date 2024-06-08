@@ -17,9 +17,12 @@ class Ui_MainWindow(object):
         self.label.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.verticalLayout.addWidget(self.label)
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
+        self.startButton = QtWidgets.QPushButton(self.centralwidget)
+        self.startButton.setObjectName("startButton")
+        self.verticalLayout.addWidget(self.startButton)
+        self.stopButton = QtWidgets.QPushButton(self.centralwidget)
+        self.stopButton.setObjectName("stopButton")
+        self.verticalLayout.addWidget(self.stopButton)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -33,7 +36,8 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Connect the push button's clicked signal to the slot
-        self.pushButton.clicked.connect(self.start_animation)
+        self.startButton.clicked.connect(self.start_animation)
+        self.stopButton.clicked.connect(self.stop_animation)
 
         # Create a QTimer
         self.timer = QtCore.QTimer()
@@ -47,11 +51,16 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pushButton.setText(_translate("MainWindow", "PushButton"))
+        self.startButton.setText(_translate("MainWindow", "Start"))
+        self.stopButton.setText(_translate("MainWindow", "Stop"))
 
     def start_animation(self):
         # Start the QTimer
         self.timer.start(1)  # update every milisecond
+
+    def stop_animation(self):
+        # Stop the QTimer
+        self.timer.stop()
 
     def render_numpy_array(self):
         # Reset the array
@@ -62,12 +71,12 @@ class Ui_MainWindow(object):
             cv2.circle(self.array, (x, y), (self.counter + r) % 256, color, -1)
 
         # Normalize the array to the range [0, 255] and convert it to uint8, (MemoryView)
-        N = (255 * self.array / np.max(self.array)).astype(np.uint8)
+        N= (255 * self.array / np.max(self.array)).astype(np.uint8) 
 
         # Convert the numpy array to a QImage
         height, width, colors = self.array.shape
         bytesPerLine = colors * width
-        qimage = QtGui.QImage(N, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+        qimage = QtGui.QImage(N.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
 
         # Convert the QImage to QPixmap and scale it to the size of the QLabel
         pixmap = QtGui.QPixmap.fromImage(qimage).scaled(self.label.size(), QtCore.Qt.KeepAspectRatio)
