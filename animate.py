@@ -41,6 +41,9 @@ class Ui_MainWindow(object):
         self.circles = [(random.randint(0, 512), random.randint(0, 512), random.randint(0, 256), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))) for _ in range(5)]
         self.counter = 0
 
+        # Create a 3D numpy array of double datatype
+        self.array = np.zeros((512, 512, 3))
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -51,20 +54,20 @@ class Ui_MainWindow(object):
         self.timer.start(1)  # update every milisecond
 
     def render_numpy_array(self):
-        # Create a 3D numpy array of double datatype
-        array = np.zeros((512, 512, 3))
+        # Reset the array
+        self.array.fill(0)
 
         # Create expanding circles
         for i, (x, y, r, color) in enumerate(self.circles):
-            cv2.circle(array, (x, y), (self.counter + r) % 256, color, -1)
+            cv2.circle(self.array, (x, y), (self.counter + r) % 256, color, -1)
 
-        # Normalize the array to the range [0, 255] and convert it to uint8
-        array = (255 * array / np.max(array)).astype(np.uint8)
+        # Normalize the array to the range [0, 255] and convert it to uint8, (MemoryView)
+        N = (255 * self.array / np.max(self.array)).astype(np.uint8)
 
         # Convert the numpy array to a QImage
-        height, width, colors = array.shape
+        height, width, colors = self.array.shape
         bytesPerLine = colors * width
-        qimage = QtGui.QImage(array.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+        qimage = QtGui.QImage(N, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
 
         # Convert the QImage to QPixmap and scale it to the size of the QLabel
         pixmap = QtGui.QPixmap.fromImage(qimage).scaled(self.label.size(), QtCore.Qt.KeepAspectRatio)
