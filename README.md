@@ -1,13 +1,13 @@
-# PyQt5-Numpy-Animator 
+# PyQt5-Numpy-Animator
 
-This is a simple PyQt5 application that generates and displays a 2D animation of random numpy arrays (grayscale images) using OpenCV.
+This is a simple PyQt5 application that generates a 2D animation of a time dependent numpy array. The animation display is embedded in the PyQt5 application window. The numpy data is changed (to mimic expanding circle) using opencv.
 
 ## Requirements
 
 - Python 3
 - PyQt5
 - NumPy
-- OpenCV 
+- OpenCV
 
 ## How to Run
 
@@ -18,6 +18,7 @@ This is a simple PyQt5 application that generates and displays a 2D animation of
 ```
 pip install PyQt5 numpy opencv-python
 ```
+
 3. Simply run
 
 ```

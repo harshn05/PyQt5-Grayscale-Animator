@@ -37,6 +37,7 @@ class Ui_MainWindow(object):
         # Create a QTimer
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.render_numpy_array)
+        self.counter = 0
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -48,17 +49,28 @@ class Ui_MainWindow(object):
         self.timer.start(1)  # update every milisecond
 
     def render_numpy_array(self):
-        # Create a numpy array
-        array = np.random.randint(0, 256, (512, 512), dtype=np.uint8)
+        # Create a 3D numpy array of double datatype
+        array = np.zeros((512, 512, 3))
+
+        # Create an expanding circle
+        cv2.circle(array, (256, 256), self.counter % 256, (0, 255, 0), -1)
+
+        # Normalize the array to the range [0, 255] and convert it to uint8
+        array = (255 * array / np.max(array)).astype(np.uint8)
 
         # Convert the numpy array to a QImage
-        qimage = QtGui.QImage(array.data, array.shape[1], array.shape[0], QtGui.QImage.Format_Grayscale8)
+        height, width, colors = array.shape
+        bytesPerLine = colors * width
+        qimage = QtGui.QImage(array.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
 
         # Convert the QImage to QPixmap and scale it to the size of the QLabel
         pixmap = QtGui.QPixmap.fromImage(qimage).scaled(self.label.size(), QtCore.Qt.KeepAspectRatio)
 
         # Display the QPixmap in the QLabel
         self.label.setPixmap(pixmap)
+
+        # Increment the counter
+        self.counter += 1
 
     def resizeEvent(self, event):
         # Update the QPixmap when the window is resized
